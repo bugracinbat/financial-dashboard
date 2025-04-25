@@ -11,7 +11,6 @@ import {
   ArcElement,
   Filler,
 } from "chart.js";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 ChartJS.register(
@@ -274,7 +273,6 @@ const balanceHistoryOptions = {
 };
 
 export default function Dashboard() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [transferAmount, setTransferAmount] = useState("525.50");
 
   return (
