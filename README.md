@@ -1,54 +1,125 @@
-# React + TypeScript + Vite
+# Financial Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern and responsive financial dashboard built with React, Vite, and Tailwind CSS. This application provides a clean interface for managing financial data, transactions, and accounts.
 
-Currently, two official plugins are available:
+[Live](https://financial-dashboard-one-theta.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Financial Dashboard
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 📊 Interactive dashboard with financial overview
+- 💳 Transaction management
+- 👤 Account management
+- 📈 Investment tracking
+- 💰 Credit card and loan management
+- 🛠 Service management
+- 🎯 Privilege tracking
+- 🔍 Search functionality
+- 📱 Fully responsive design
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Tech Stack
+
+- React 18
+- Vite
+- Tailwind CSS
+- React Router
+- Heroicons
+- TypeScript
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16.x or later
+- npm 7.x or later
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/bugracinbat/financial-dashboard.git
+cd financial-dashboard
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:5173](http://localhost:5173) in your browser
+
+## Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+The build output will be in the `dist` directory.
+
+## Deployment
+
+This project is configured for deployment on Vercel. To deploy:
+
+1. Install Vercel CLI:
+
+```bash
+npm install -g vercel
+```
+
+2. Deploy to Vercel:
+
+```bash
+vercel
+```
+
+Alternatively, you can deploy through the Vercel dashboard:
+
+1. Push your code to GitHub
+2. Import your repository on [Vercel](https://vercel.com)
+3. Vercel will automatically detect the correct settings
+4. Click "Deploy"
+
+## Project Structure
+
+```
+financial-dashboard/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── layouts/        # Layout components
+│   ├── pages/          # Page components
+│   ├── App.tsx         # Main application component
+│   └── main.tsx        # Application entry point
+├── public/             # Static assets
+├── index.html          # HTML template
+├── tailwind.config.js  # Tailwind CSS configuration
+├── vite.config.ts      # Vite configuration
+└── vercel.json         # Vercel deployment configuration
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Design inspired by modern financial applications
+- Icons provided by [Heroicons](https://heroicons.com/)
