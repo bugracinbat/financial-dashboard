@@ -29,7 +29,7 @@ const navigation = [
   { name: "Loans", href: "/loans", icon: BanknotesIcon },
   { name: "Services", href: "/services", icon: WrenchScrewdriverIcon },
   { name: "My Privileges", href: "/privileges", icon: UserGroupIcon },
-  { name: "Setting", href: "/settings", icon: Cog6ToothIcon },
+  { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
 ];
 
 export default function MainLayout({ children }: MainLayoutProps) {
@@ -37,7 +37,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const currentPage = navigation.find(item => item.href === location.pathname)?.name || "Overview";
+  const currentPage =
+    navigation.find((item) => item.href === location.pathname)?.name ||
+    "Overview";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -98,7 +100,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
               >
                 <item.icon
                   className={`h-5 w-5 mr-3 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${
-                    isActive ? "text-white" : "text-gray-400 group-hover:text-blue-500"
+                    isActive
+                      ? "text-white"
+                      : "text-gray-400 group-hover:text-blue-500"
                   }`}
                 />
                 <span>{item.name}</span>
@@ -181,7 +185,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
               >
                 <item.icon
                   className={`h-5 w-5 mr-3 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 ${
-                    isActive ? "text-white" : "text-gray-400 group-hover:text-blue-500"
+                    isActive
+                      ? "text-white"
+                      : "text-gray-400 group-hover:text-blue-500"
                   }`}
                 />
                 <span>{item.name}</span>
@@ -202,7 +208,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <Bars3Icon className="h-6 w-6 text-gray-400" />
           </button>
           <div className="flex-1 flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-[#1E293B]">{currentPage}</h1>
+            <h1 className="text-xl font-semibold text-[#1E293B]">
+              {currentPage}
+            </h1>
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <div className="relative">
