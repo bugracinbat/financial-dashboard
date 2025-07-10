@@ -200,7 +200,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="sticky top-0 z-10 h-16 glass border-b border-white/10 flex items-center px-6 shadow-sm">
+        <header className="h-16 glass border-b border-white/10 flex items-center px-6 shadow-sm">
           <button
             className="lg:hidden mr-4"
             onClick={() => setIsSidebarOpen(true)}
