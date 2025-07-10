@@ -2,7 +2,7 @@
 
 A modern and responsive financial dashboard built with React, Vite, and Tailwind CSS. WealthWave helps you ride the wave of your financial journey with smart insights and intuitive management tools.
 
-[Live](https://financial-dashboard-one-theta.vercel.app/)
+[Live](https://bugracinbat.github.io/financial-dashboard/)
 
 WealthWave Dashboard
 
