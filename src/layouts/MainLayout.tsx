@@ -37,10 +37,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const currentPage = navigation.find(item => item.href === location.pathname)?.name || "Overview";
+
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100 z-30">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100 z-30">
         <div className="flex h-16 items-center px-6 border-b border-gray-100">
           <div className="flex items-center space-x-3">
             <div className="bg-[#0066FF] p-2 rounded-lg">
@@ -105,14 +107,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       {/* Mobile sidebar overlay */}
       <div
-        className={`lg:hidden fixed inset-0 bg-gray-600 bg-opacity-75 z-20 ${
-          isSidebarOpen ? "block" : "hidden"
+        className={`fixed inset-0 bg-gray-600 bg-opacity-75 z-40 transition-opacity duration-200 lg:hidden ${
+          isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setIsSidebarOpen(false)}
       />
 
+      {/* Mobile Sidebar */}
       <div
-        className={`lg:hidden fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100 transform transition-transform duration-200 ease-in-out z-30 ${
+        className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100 transform transition-transform duration-200 ease-in-out z-50 lg:hidden ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -165,7 +168,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 to={item.href}
                 className={`group flex items-center px-3 py-2 mb-1 rounded-xl transition-all text-sm ${
                   isActive
-                    ? "bg-[#0066FF]"
+                    ? "bg-[#0066FF] text-white"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
                 onClick={() => setIsSidebarOpen(false)}
@@ -175,9 +178,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     isActive ? "text-white" : ""
                   }`}
                 />
-                <span className={isActive ? "text-white" : ""}>
-                  {item.name}
-                </span>
+                <span>{item.name}</span>
               </Link>
             );
           })}
@@ -195,7 +196,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
             <Bars3Icon className="h-6 w-6 text-gray-400" />
           </button>
           <div className="flex-1 flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-[#1E293B]">Overview</h1>
+            <h1 className="text-xl font-semibold text-[#1E293B]">{currentPage}</h1>
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <div className="relative">
