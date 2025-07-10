@@ -164,7 +164,7 @@ const chartOptions = {
       max: 500,
       ticks: {
         stepSize: 100,
-        callback: function (value: any) {
+        callback: function (value: string | number) {
           return value;
         },
         color: "#64748B",
@@ -237,7 +237,7 @@ const balanceHistoryOptions = {
       max: 800,
       ticks: {
         stepSize: 200,
-        callback: function (value: any) {
+        callback: function (value: string | number) {
           return value;
         },
         color: "#64748B",
