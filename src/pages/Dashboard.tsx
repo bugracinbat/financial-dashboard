@@ -279,15 +279,15 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-[#1E293B]">My Cards</h2>
-        <button className="bg-black text-white px-4 py-1.5 rounded-lg text-sm font-medium">
-          See All
+        <button className="btn-primary rounded-lg text-sm">
+          <span>See All</span>
         </button>
       </div>
 
       {/* Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <div className="w-full">
-          <div className="rounded-2xl bg-[#1E293B] text-white p-6 relative overflow-hidden h-full">
+          <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-6 relative overflow-hidden h-full animate-gradient shadow-2xl shadow-purple-900/50 card-hover">
             <div className="flex justify-between items-start mb-8">
               <div>
                 <p className="text-sm opacity-80 mb-1">Balance</p>
@@ -323,7 +323,7 @@ export default function Dashboard() {
         </div>
 
         <div className="w-full">
-          <div className="rounded-2xl bg-white p-6 border border-gray-100 relative overflow-hidden h-full">
+          <div className="rounded-2xl glass glass-hover p-6 relative overflow-hidden h-full shadow-xl">
             <div className="flex justify-between items-start mb-8">
               <div>
                 <p className="text-sm text-gray-500 mb-1">Balance</p>
@@ -359,7 +359,7 @@ export default function Dashboard() {
         </div>
 
         <div className="w-full">
-          <div className="rounded-2xl bg-white p-6 border border-gray-100 h-full">
+          <div className="rounded-2xl glass glass-hover p-6 h-full shadow-xl">
             <h3 className="font-semibold mb-4 text-gray-900">
               Recent Transaction
             </h3>
@@ -409,7 +409,7 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Weekly Activity
             </h3>
@@ -419,7 +419,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="xl:col-span-1">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Expense Statistics
             </h3>
@@ -437,7 +437,7 @@ export default function Dashboard() {
       {/* Quick Transfer & Balance History */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-1">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">Quick Transfer</h3>
             <div className="flex flex-wrap -space-x-4 mb-8">
               {quickTransferUsers.map((user) => (
@@ -504,7 +504,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="xl:col-span-2">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Balance History
             </h3>

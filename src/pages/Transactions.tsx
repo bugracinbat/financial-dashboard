@@ -252,7 +252,7 @@ export default function Transactions() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowModal(true)}
-            className="bg-[#0066FF] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[#0066FF]/90"
+            className="btn-primary rounded-lg text-sm flex items-center gap-2"
           >
             <PlusIcon className="h-4 w-4" />
             Add Transaction
@@ -269,19 +269,19 @@ export default function Transactions() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-6 border border-gray-100">
+        <div className="glass rounded-xl p-6 shadow-xl card-hover">
           <p className="text-sm text-gray-500 mb-1">Total Income</p>
           <p className="text-2xl font-semibold text-green-600">
             ${totalIncome.toFixed(2)}
           </p>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-gray-100">
+        <div className="glass rounded-xl p-6 shadow-xl card-hover">
           <p className="text-sm text-gray-500 mb-1">Total Expense</p>
           <p className="text-2xl font-semibold text-red-600">
             ${totalExpense.toFixed(2)}
           </p>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-gray-100">
+        <div className="glass rounded-xl p-6 shadow-xl card-hover">
           <p className="text-sm text-gray-500 mb-1">Balance</p>
           <p className={`text-2xl font-semibold ${balance >= 0 ? "text-green-600" : "text-red-600"}`}>
             ${balance.toFixed(2)}
@@ -290,7 +290,7 @@ export default function Transactions() {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl p-4 border border-gray-100">
+      <div className="glass rounded-xl p-4 shadow-xl">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -364,7 +364,7 @@ export default function Transactions() {
       </div>
 
       {/* Transactions Table */}
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+      <div className="glass rounded-xl overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-100">
