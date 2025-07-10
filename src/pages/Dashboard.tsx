@@ -311,9 +311,19 @@ const balanceHistoryOptions = {
   },
 };
 
+type QuickTransferUser = {
+  id: number;
+  name: string;
+  role: string;
+  email: string;
+  isFavorite: boolean;
+  lastTransferAmount: number;
+  image: string;
+};
+
 export default function Dashboard() {
   const [transferAmount, setTransferAmount] = useState("525.50");
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<QuickTransferUser | null>(null);
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [isTransferring, setIsTransferring] = useState(false);
   const [transferSuccess, setTransferSuccess] = useState(false);
@@ -324,7 +334,7 @@ export default function Dashboard() {
     ? quickTransferUsers.filter(user => user.isFavorite)
     : quickTransferUsers;
 
-  const handleQuickTransfer = (user) => {
+  const handleQuickTransfer = (user: QuickTransferUser) => {
     setSelectedUser(user);
     setTransferAmount(user.lastTransferAmount.toString());
     setShowTransferModal(true);
@@ -351,7 +361,7 @@ export default function Dashboard() {
     }, 2000);
   };
 
-  const handleQuickAmount = (amount) => {
+  const handleQuickAmount = (amount: number) => {
     setTransferAmount(amount.toString());
   };
 
