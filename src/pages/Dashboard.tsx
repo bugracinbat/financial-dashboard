@@ -21,22 +21,44 @@ const weeklyActivityData = {
   labels: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
   datasets: [
     {
-      label: "Withdraw",
+      label: "Withdrawals",
       data: [450, 350, 320, 450, 200, 400, 380],
-      borderColor: "#1E293B",
-      backgroundColor: "#1E293B",
-      tension: 0,
-      borderWidth: 2,
-      pointRadius: 0,
+      borderColor: "#DC2626",
+      backgroundColor: (context: { chart: { ctx: CanvasRenderingContext2D } }) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, "rgba(220, 38, 38, 0.2)");
+        gradient.addColorStop(1, "rgba(220, 38, 38, 0)");
+        return gradient;
+      },
+      tension: 0.4,
+      borderWidth: 3,
+      pointRadius: 4,
+      pointBackgroundColor: "#DC2626",
+      pointBorderColor: "#fff",
+      pointBorderWidth: 2,
+      pointHoverRadius: 6,
+      fill: true,
     },
     {
-      label: "Deposit",
+      label: "Deposits",
       data: [220, 120, 250, 350, 230, 230, 280],
       borderColor: "#0066FF",
-      backgroundColor: "#0066FF",
-      tension: 0,
-      borderWidth: 2,
-      pointRadius: 0,
+      backgroundColor: (context: { chart: { ctx: CanvasRenderingContext2D } }) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, "rgba(0, 102, 255, 0.2)");
+        gradient.addColorStop(1, "rgba(0, 102, 255, 0)");
+        return gradient;
+      },
+      tension: 0.4,
+      borderWidth: 3,
+      pointRadius: 4,
+      pointBackgroundColor: "#0066FF",
+      pointBorderColor: "#fff",
+      pointBorderWidth: 2,
+      pointHoverRadius: 6,
+      fill: true,
     },
   ],
 };
@@ -46,11 +68,19 @@ const expenseData = {
   datasets: [
     {
       data: [30, 15, 20, 35],
-      backgroundColor: ["#1E293B", "#F59E0B", "#0066FF", "#111827"],
-      borderWidth: 0,
+      backgroundColor: ["#8B5CF6", "#F59E0B", "#0066FF", "#6B7280"],
+      borderWidth: 2,
+      borderColor: "#fff",
     },
   ],
 };
+
+const expenseCategories = [
+  { name: "Entertainment", amount: 850, percentage: 30, color: "#8B5CF6", trend: "+5%" },
+  { name: "Bill Expense", amount: 425, percentage: 15, color: "#F59E0B", trend: "-2%" },
+  { name: "Investment", amount: 567, percentage: 20, color: "#0066FF", trend: "+12%" },
+  { name: "Others", amount: 991, percentage: 35, color: "#6B7280", trend: "+3%" },
+];
 
 const balanceHistoryData = {
   labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"],
@@ -211,20 +241,24 @@ const quickTransferUsers = [
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  interaction: {
+    mode: 'index' as const,
+    intersect: false,
+  },
   plugins: {
     legend: {
       display: true,
       position: "top" as const,
-      align: "start" as const,
+      align: "end" as const,
       labels: {
-        boxWidth: 8,
-        boxHeight: 8,
+        boxWidth: 12,
+        boxHeight: 12,
         usePointStyle: true,
         pointStyle: "circle",
-        padding: 20,
+        padding: 15,
         color: "#64748B",
         font: {
-          size: 12,
+          size: 11,
           family: "Inter",
           weight: 500,
         },
@@ -232,11 +266,19 @@ const chartOptions = {
     },
     tooltip: {
       enabled: true,
-      backgroundColor: "#1E293B",
-      titleColor: "#fff",
-      bodyColor: "#fff",
+      backgroundColor: "rgba(255, 255, 255, 0.95)",
+      titleColor: "#1E293B",
+      bodyColor: "#1E293B",
+      borderColor: "#E2E8F0",
+      borderWidth: 1,
       padding: 12,
-      displayColors: false,
+      displayColors: true,
+      usePointStyle: true,
+      callbacks: {
+        label: function(context: { dataset: { label: string }, parsed: { y: number } }) {
+          return context.dataset.label + ': $' + context.parsed.y;
+        }
+      }
     },
   },
   scales: {
@@ -246,17 +288,17 @@ const chartOptions = {
       ticks: {
         stepSize: 100,
         callback: function (value: string | number) {
-          return value;
+          return '$' + value;
         },
         color: "#64748B",
         font: {
-          size: 12,
+          size: 11,
           family: "Inter",
         },
-        padding: 10,
+        padding: 8,
       },
       grid: {
-        color: "#E2E8F0",
+        color: "rgba(226, 232, 240, 0.5)",
         drawBorder: false,
       },
       border: {
@@ -270,10 +312,10 @@ const chartOptions = {
       ticks: {
         color: "#64748B",
         font: {
-          size: 12,
+          size: 11,
           family: "Inter",
         },
-        padding: 10,
+        padding: 8,
       },
       border: {
         display: false,
@@ -291,14 +333,28 @@ const doughnutOptions = {
     },
     tooltip: {
       enabled: true,
-      backgroundColor: "#1E293B",
-      titleColor: "#fff",
-      bodyColor: "#fff",
+      backgroundColor: "rgba(255, 255, 255, 0.95)",
+      titleColor: "#1E293B",
+      bodyColor: "#1E293B",
+      borderColor: "#E2E8F0",
+      borderWidth: 1,
       padding: 12,
-      displayColors: false,
+      displayColors: true,
+      usePointStyle: true,
+      callbacks: {
+        label: function(context: { label: string, parsed: number, dataset: { data: number[] } }) {
+          const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+          const percentage = ((context.parsed / total) * 100).toFixed(1);
+          return context.label + ': ' + percentage + '%';
+        }
+      }
     },
   },
-  cutout: "75%",
+  cutout: "70%",
+  animation: {
+    animateRotate: true,
+    animateScale: true,
+  },
 };
 
 const balanceHistoryOptions = {
@@ -393,6 +449,7 @@ export default function Dashboard() {
   const [transferNote, setTransferNote] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showInsights, setShowInsights] = useState(true);
+  const [activityPeriod, setActivityPeriod] = useState("weekly");
 
   const filteredUsers = showFavoritesOnly
     ? quickTransferUsers.filter((user) => user.isFavorite)
@@ -774,12 +831,88 @@ export default function Dashboard() {
           className="xl:col-span-2 animate-fade-in"
           style={{ animationDelay: "0.4s" }}
         >
-          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
-            <h3 className="font-semibold mb-6 text-gray-900">
-              Weekly Activity
-            </h3>
-            <div className="h-[300px]">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover h-full">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  Weekly Activity
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Transaction overview for this week
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={() => setActivityPeriod("daily")}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    activityPeriod === "daily" 
+                      ? "text-white bg-blue-600" 
+                      : "text-gray-600 bg-gray-100 hover:bg-gray-200"
+                  }`}>
+                  Daily
+                </button>
+                <button 
+                  onClick={() => setActivityPeriod("weekly")}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    activityPeriod === "weekly" 
+                      ? "text-white bg-blue-600" 
+                      : "text-gray-600 bg-gray-100 hover:bg-gray-200"
+                  }`}>
+                  Weekly
+                </button>
+                <button 
+                  onClick={() => setActivityPeriod("monthly")}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    activityPeriod === "monthly" 
+                      ? "text-white bg-blue-600" 
+                      : "text-gray-600 bg-gray-100 hover:bg-gray-200"
+                  }`}>
+                  Monthly
+                </button>
+              </div>
+            </div>
+            
+            {/* Activity Summary */}
+            <div className="grid grid-cols-4 gap-4 mb-6">
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Total Transactions</p>
+                <p className="text-lg font-bold text-gray-900">42</p>
+                <p className="text-xs text-gray-500 mt-1">This week</p>
+              </div>
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Total Deposits</p>
+                <p className="text-lg font-bold text-blue-600">$1,680</p>
+                <p className="text-xs text-green-600 mt-1">+18.2%</p>
+              </div>
+              <div className="bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Total Withdrawals</p>
+                <p className="text-lg font-bold text-gray-900">$2,550</p>
+                <p className="text-xs text-red-600 mt-1">+5.4%</p>
+              </div>
+              <div className="bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Net Flow</p>
+                <p className="text-lg font-bold text-purple-600">-$870</p>
+                <p className="text-xs text-gray-500 mt-1">Outflow</p>
+              </div>
+            </div>
+            
+            <div className="h-[250px]">
               <LineChart data={weeklyActivityData} options={chartOptions} />
+            </div>
+            
+            {/* Trend Analysis */}
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <ArrowTrendingUpIcon className="h-4 w-4 text-green-600" />
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium text-gray-900">Key Insight:</span> Highest deposit on Tuesday ($350)
+                  </p>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Avg. daily balance: <span className="font-medium text-gray-900">-$124</span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -787,15 +920,70 @@ export default function Dashboard() {
           className="xl:col-span-1 animate-fade-in"
           style={{ animationDelay: "0.5s" }}
         >
-          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
-            <h3 className="font-semibold mb-6 text-gray-900">
-              Expense Statistics
-            </h3>
-            <div className="relative h-[300px] flex items-center justify-center">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover h-full flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  Expense Statistics
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Total: $2,833 this month
+                </p>
+              </div>
+              <select className="text-xs font-medium text-gray-600 bg-gray-100 px-3 py-1.5 rounded-lg border-0 focus:ring-2 focus:ring-blue-500">
+                <option>This Month</option>
+                <option>Last Month</option>
+                <option>Last 3 Months</option>
+              </select>
+            </div>
+            
+            <div className="relative h-[180px] flex items-center justify-center mb-4">
               <DoughnutChart data={expenseData} options={doughnutOptions} />
               <div className="absolute inset-0 flex items-center justify-center flex-col">
-                <p className="text-3xl font-semibold text-gray-900">30%</p>
-                <p className="text-sm text-gray-500">Entertainment</p>
+                <p className="text-2xl font-bold text-gray-900">$2,833</p>
+                <p className="text-xs text-gray-500">Total Spent</p>
+              </div>
+            </div>
+            
+            {/* Category Breakdown */}
+            <div className="flex-grow">
+              <div className="space-y-3">
+                {expenseCategories.map((category, index) => (
+                  <div
+                    key={category.name}
+                    className="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors animate-scale-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: category.color }}
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{category.name}</p>
+                        <p className="text-xs text-gray-500">{category.percentage}% of total</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-gray-900">${category.amount}</p>
+                      <p className={`text-xs font-medium ${
+                        category.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'
+                      }`}>
+                        {category.trend}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Budget Alert */}
+            <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+              <div className="flex items-center space-x-2">
+                <BellIcon className="h-4 w-4 text-amber-600" />
+                <p className="text-xs text-amber-800">
+                  <span className="font-medium">Budget Alert:</span> You've spent 85% of your monthly budget
+                </p>
               </div>
             </div>
           </div>
