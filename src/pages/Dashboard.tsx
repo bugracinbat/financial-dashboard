@@ -80,11 +80,24 @@ const balanceHistoryData = {
       label: "Balance",
       data: [200, 300, 450, 700, 250, 450, 600],
       borderColor: "#0066FF",
-      backgroundColor: "rgba(0, 102, 255, 0.1)",
+      backgroundColor: (context: any) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, "rgba(0, 102, 255, 0.3)");
+        gradient.addColorStop(1, "rgba(0, 102, 255, 0)");
+        return gradient;
+      },
       tension: 0.4,
       fill: true,
-      borderWidth: 2,
-      pointRadius: 0,
+      borderWidth: 3,
+      pointRadius: 4,
+      pointBackgroundColor: "#0066FF",
+      pointBorderColor: "#fff",
+      pointBorderWidth: 2,
+      pointHoverRadius: 6,
+      pointHoverBackgroundColor: "#0066FF",
+      pointHoverBorderColor: "#fff",
+      pointHoverBorderWidth: 2,
     },
   ],
 };
@@ -312,12 +325,28 @@ const doughnutOptions = {
 const balanceHistoryOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  interaction: {
+    mode: 'index' as const,
+    intersect: false,
+  },
   plugins: {
     legend: {
       display: false,
     },
     tooltip: {
-      enabled: false,
+      enabled: true,
+      backgroundColor: "rgba(255, 255, 255, 0.95)",
+      titleColor: "#1E293B",
+      bodyColor: "#1E293B",
+      borderColor: "#E2E8F0",
+      borderWidth: 1,
+      padding: 12,
+      displayColors: false,
+      callbacks: {
+        label: function(context: any) {
+          return `Balance: $${context.parsed.y}`;
+        }
+      }
     },
   },
   scales: {
@@ -327,16 +356,17 @@ const balanceHistoryOptions = {
       ticks: {
         stepSize: 200,
         callback: function (value: string | number) {
-          return value;
+          return `$${value}`;
         },
         color: "#64748B",
         font: {
-          size: 12,
+          size: 11,
           family: "Inter",
         },
+        padding: 8,
       },
       grid: {
-        color: "#E2E8F0",
+        color: "rgba(226, 232, 240, 0.5)",
         drawBorder: false,
       },
       border: {
@@ -350,9 +380,10 @@ const balanceHistoryOptions = {
       ticks: {
         color: "#64748B",
         font: {
-          size: 12,
+          size: 11,
           family: "Inter",
         },
+        padding: 8,
       },
       border: {
         display: false,
@@ -798,7 +829,7 @@ export default function Dashboard() {
           className="xl:col-span-1 animate-slide-in"
           style={{ animationDelay: "0.6s" }}
         >
-          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover h-full flex flex-col">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-gray-900">Quick Transfer</h3>
               <div className="flex items-center space-x-2">
@@ -881,7 +912,7 @@ export default function Dashboard() {
             </div>
 
             {/* Transfer Amount Input */}
-            <div className="space-y-4">
+            <div className="space-y-4 flex-grow">
               <div>
                 <p className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wider">
                   Transfer Amount
@@ -938,11 +969,52 @@ export default function Dashboard() {
           className="xl:col-span-2 animate-fade-in"
           style={{ animationDelay: "0.7s" }}
         >
-          <div className="glass rounded-2xl p-6 shadow-xl card-hover">
-            <h3 className="font-semibold mb-6 text-gray-900">
-              Balance History
-            </h3>
-            <div className="h-[300px]">
+          <div className="glass rounded-2xl p-6 shadow-xl card-hover h-full">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  Balance History
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Your balance trend over the last 7 months
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                  1M
+                </button>
+                <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                  3M
+                </button>
+                <button className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg">
+                  6M
+                </button>
+                <button className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                  1Y
+                </button>
+              </div>
+            </div>
+            
+            {/* Stats Row */}
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Current Balance</p>
+                <p className="text-lg font-bold text-gray-900">$600</p>
+                <p className="text-xs text-green-600 mt-1">+12% from last month</p>
+              </div>
+              <div className="bg-gradient-to-r from-green-50 to-green-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Highest Balance</p>
+                <p className="text-lg font-bold text-gray-900">$700</p>
+                <p className="text-xs text-gray-500 mt-1">in October</p>
+              </div>
+              <div className="bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-lg p-3">
+                <p className="text-xs text-gray-600 mb-1">Average Balance</p>
+                <p className="text-lg font-bold text-gray-900">$421</p>
+                <p className="text-xs text-gray-500 mt-1">Last 6 months</p>
+              </div>
+            </div>
+            
+            <div className="h-[280px] -mx-2">
               <Line data={balanceHistoryData} options={balanceHistoryOptions} />
             </div>
           </div>
