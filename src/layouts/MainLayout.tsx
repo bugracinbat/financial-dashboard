@@ -82,10 +82,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(
-    notifications.filter(n => !n.read).length
+  const [unreadNotifications] = useState(
+    notifications.filter((n) => !n.read).length
   );
-  
+
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -102,13 +102,22 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
+      ) {
         setShowProfileMenu(false);
       }
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target as Node)
+      ) {
         setShowNotifications(false);
       }
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowSearchSuggestions(false);
       }
     };
@@ -280,11 +289,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className={`sticky top-0 z-40 h-16 glass border-b border-white/10 flex items-center px-6 transition-all duration-300 ${
-          isScrolled 
-            ? "shadow-lg backdrop-blur-xl bg-white/95 border-gray-200/50" 
-            : "shadow-sm backdrop-blur-xl bg-white/80"
-        }`}>
+        <header
+          className={`sticky top-0 z-40 h-16 glass border-b border-white/10 flex items-center px-6 transition-all duration-300 ${
+            isScrolled
+              ? "shadow-lg backdrop-blur-xl bg-white/95 border-gray-200/50"
+              : "shadow-sm backdrop-blur-xl bg-white/80"
+          }`}
+        >
           <button
             className="lg:hidden mr-4"
             onClick={() => setIsSidebarOpen(true)}
@@ -313,13 +324,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   <div className="absolute top-full mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     {searchQuery && (
                       <div className="p-3 border-b border-gray-100">
-                        <p className="text-xs text-gray-500">Search results for "{searchQuery}"</p>
+                        <p className="text-xs text-gray-500">
+                          Search results for "{searchQuery}"
+                        </p>
                       </div>
                     )}
                     <div className="p-2">
                       {searchSuggestions
-                        .filter(suggestion => 
-                          suggestion.toLowerCase().includes(searchQuery.toLowerCase())
+                        .filter((suggestion) =>
+                          suggestion
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase())
                         )
                         .map((suggestion, index) => (
                           <button
@@ -338,9 +353,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   </div>
                 )}
               </div>
-              
+
               {/* Dark Mode Toggle */}
-              <button 
+              <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2.5 rounded-xl glass-hover transition-all hover:scale-110"
               >
@@ -350,15 +365,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   <MoonIcon className="h-5 w-5 text-gray-400" />
                 )}
               </button>
-              
+
               {/* Settings */}
-              <Link to="/settings" className="p-2.5 rounded-xl glass-hover transition-transform hover:scale-110">
+              <Link
+                to="/settings"
+                className="p-2.5 rounded-xl glass-hover transition-transform hover:scale-110"
+              >
                 <Cog6ToothIcon className="h-5 w-5 text-gray-400" />
               </Link>
-              
+
               {/* Notifications with Badge */}
               <div className="relative" ref={notificationsRef}>
-                <button 
+                <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="p-2.5 rounded-xl glass-hover transition-transform hover:scale-110 relative"
                 >
@@ -367,11 +385,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                   )}
                 </button>
-                
+
                 {showNotifications && (
                   <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                      <h3 className="font-semibold text-gray-900">Notifications</h3>
+                      <h3 className="font-semibold text-gray-900">
+                        Notifications
+                      </h3>
                       <span className="text-xs text-blue-600 font-medium">
                         {unreadNotifications} new
                       </span>
@@ -381,13 +401,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
                         <div
                           key={notification.id}
                           className={`p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors ${
-                            !notification.read ? 'bg-blue-50/50' : ''
+                            !notification.read ? "bg-blue-50/50" : ""
                           }`}
                         >
                           <div className="flex items-start space-x-3">
-                            <div className={`w-2 h-2 rounded-full mt-2 ${
-                              !notification.read ? 'bg-blue-600' : 'bg-gray-300'
-                            }`} />
+                            <div
+                              className={`w-2 h-2 rounded-full mt-2 ${
+                                !notification.read
+                                  ? "bg-blue-600"
+                                  : "bg-gray-300"
+                              }`}
+                            />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900">
                                 {notification.title}
@@ -411,10 +435,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
                   </div>
                 )}
               </div>
-              
+
               {/* Profile Menu */}
               <div className="relative ml-2" ref={profileMenuRef}>
-                <button 
+                <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
                   className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                 >
@@ -424,15 +448,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     className="h-9 w-9 rounded-full object-cover ring-2 ring-white/50 shadow-lg"
                   />
                   <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium text-gray-900">Jane Doe</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Jane Doe
+                    </p>
                     <p className="text-xs text-gray-500">jane@example.com</p>
                   </div>
                 </button>
-                
+
                 {showProfileMenu && (
                   <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
                     <div className="p-4 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">Jane Doe</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        Jane Doe
+                      </p>
                       <p className="text-xs text-gray-500">jane@example.com</p>
                     </div>
                     <div className="p-2">
