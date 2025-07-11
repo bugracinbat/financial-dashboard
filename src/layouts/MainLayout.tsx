@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
@@ -36,6 +36,17 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const currentPage =
     navigation.find((item) => item.href === location.pathname)?.name ||
@@ -200,7 +211,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Header */}
-        <header className="h-16 glass border-b border-white/10 flex items-center px-6 shadow-sm">
+        <header className={`sticky top-0 z-40 h-16 glass border-b border-white/10 flex items-center px-6 transition-all duration-300 ${
+          isScrolled 
+            ? "shadow-lg backdrop-blur-xl bg-white/95 border-gray-200/50" 
+            : "shadow-sm backdrop-blur-xl bg-white/80"
+        }`}>
           <button
             className="lg:hidden mr-4"
             onClick={() => setIsSidebarOpen(true)}
