@@ -2,6 +2,8 @@ import {
   PaperAirplaneIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface QuickTransferUser {
   id: number;
@@ -40,14 +42,40 @@ export default function TransferModal({
   handleTransferSubmit,
   handleQuickAmount,
 }: TransferModalProps) {
+  // Prevent body scroll when modal is open and ensure proper positioning
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+      window.scrollTo(0, 0); // Scroll to top when modal opens
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showModal]);
+
   if (!showModal) return null;
 
-  return (
+  const modalContent = (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-white bg-opacity-80 backdrop-blur-sm z-50"
       role="dialog"
       aria-modal="true"
       aria-labelledby="transfer-modal-title"
+      style={{ 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh',
+        position: 'fixed',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
+      }}
     >
       <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100">
         {transferSuccess ? (
@@ -223,4 +251,7 @@ export default function TransferModal({
       </div>
     </div>
   );
+
+  // Render modal using portal to avoid layout container issues
+  return createPortal(modalContent, document.body);
 }
