@@ -4,7 +4,7 @@ A modern and responsive financial dashboard built with React, Vite, and Tailwind
 
 [Live](https://bugracinbat.github.io/financial-dashboard/)
 
-WealthWave Dashboard
+![WealthWave Dashboard Screenshot](./screenshot.png)
 
 ## Features
 
