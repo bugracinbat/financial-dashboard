@@ -43,7 +43,12 @@ export default function TransferModal({
   if (!showModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transfer-modal-title"
+    >
       <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100">
         {transferSuccess ? (
           <div className="text-center">
@@ -66,7 +71,10 @@ export default function TransferModal({
         ) : (
           <>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 
+                id="transfer-modal-title"
+                className="text-lg font-semibold text-gray-900"
+              >
                 {selectedUser ? "Confirm Transfer" : "Send Money"}
               </h3>
               <button

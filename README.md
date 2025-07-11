@@ -1,125 +1,278 @@
 # WealthWave - Smart Financial Dashboard
 
-A modern and responsive financial dashboard built with React, Vite, and Tailwind CSS. WealthWave helps you ride the wave of your financial journey with smart insights and intuitive management tools.
+A modern, high-performance financial dashboard built with React, TypeScript, and cutting-edge web technologies. WealthWave provides an enterprise-grade user experience with comprehensive accessibility, smart insights, and intuitive financial management tools.
 
-[Live](https://bugracinbat.github.io/financial-dashboard/)
+[🚀 Live Demo](https://bugracinbat.github.io/financial-dashboard/)
 
 ![WealthWave Dashboard Screenshot](./screenshot.png)
 
-## Features
+## ✨ Key Features
 
-- 📊 Interactive dashboard with financial overview
-- 💳 Transaction management
-- 👤 Account management
-- 📈 Investment tracking
+### 📊 **Interactive Dashboard**
+- Real-time financial overview with smart insights
+- Enhanced balance history with trend analysis
+- Weekly activity metrics with period selectors
+- Expense statistics with category breakdown and budget alerts
+
+### 🎨 **Modern User Experience**
+- Glass-morphism design with smooth animations
+- Enhanced navbar with profile dropdown and notifications
+- Smart search with suggestions and filtering
+- Smooth page transitions and loading states
+- Toast notification system
+
+### ⚡ **Performance Optimized**
+- Code splitting with lazy-loaded components
+- Optimized bundle size (~219KB gzipped)
+- Skeleton loading screens for better perceived performance
+- Real-time performance monitoring in development
+
+### ♿ **Accessibility First (WCAG 2.1 AA)**
+- Screen reader support with ARIA labels
+- Keyboard navigation with shortcuts
+- Skip links and focus management
+- High contrast and reduced motion support
+- Semantic HTML structure
+
+### 💼 **Financial Management**
+- 💳 Advanced transaction management
+- 👤 Comprehensive account overview
+- 📈 Investment portfolio tracking
 - 💰 Credit card and loan management
-- 🛠 Service management
-- 🎯 Privilege tracking
-- 🔍 Search functionality
-- 📱 Fully responsive design
+- 🛠 Service and privilege tracking
 
-## Tech Stack
+### ⌨️ **Power User Features**
+- Keyboard shortcuts (Ctrl+D for Dashboard, etc.)
+- Quick transfer with user suggestions
+- Advanced search functionality
+- Dark mode ready
 
-- React 18
-- Vite
-- Tailwind CSS
-- React Router
-- Heroicons
-- TypeScript
+## 🛠 Tech Stack
 
-## Getting Started
+### **Core Technologies**
+- **React 18** - Modern React with Hooks and Suspense
+- **TypeScript** - Full type safety
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS** - Utility-first styling
 
-### Prerequisites
+### **Libraries & Tools**
+- **React Router** - Client-side routing with code splitting
+- **Chart.js** - Interactive data visualizations
+- **Heroicons** - Beautiful SVG icons
+- **React Chartjs-2** - React wrapper for Chart.js
 
-- Node.js 16.x or later
-- npm 7.x or later
+### **Performance & UX**
+- **React.lazy()** - Dynamic imports for code splitting
+- **Suspense** - Loading state management
+- **Error Boundaries** - Graceful error handling
+- **Custom Hooks** - Reusable state logic
 
-### Installation
+## 📁 Project Structure
 
-1. Clone the repository:
+```
+financial-dashboard/
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── Charts/        # Chart components (lazy-loaded)
+│   │   ├── LoadingStates/ # Skeleton screens
+│   │   ├── ErrorBoundary.tsx
+│   │   ├── KeyboardShortcuts.tsx
+│   │   ├── PageTransition.tsx
+│   │   ├── ToastNotification.tsx
+│   │   └── TransferModal.tsx
+│   ├── hooks/             # Custom React hooks
+│   │   └── usePerformanceMonitor.ts
+│   ├── layouts/           # Layout components
+│   │   └── MainLayout.tsx # Enhanced navbar & sidebar
+│   ├── pages/             # Page components (lazy-loaded)
+│   │   ├── Dashboard.tsx  # Enhanced dashboard
+│   │   ├── Transactions.tsx
+│   │   ├── Accounts.tsx
+│   │   └── ...
+│   ├── styles/            # CSS files
+│   │   └── accessibility.css
+│   ├── App.tsx            # Main app with providers
+│   └── main.tsx           # Entry point
+├── public/                # Static assets
+├── vite.config.ts         # Optimized build config
+└── package.json           # Dependencies
+```
 
+## 🚀 Getting Started
+
+### **Prerequisites**
+- **Node.js** 18.x or later
+- **npm** 8.x or later
+
+### **Quick Start**
+
+1. **Clone the repository**
 ```bash
 git clone https://github.com/bugracinbat/financial-dashboard.git
 cd financial-dashboard
 ```
 
-2. Install dependencies:
-
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. Start the development server:
-
+3. **Start development server**
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser
+4. **Open in browser**
+   - Navigate to [http://localhost:5173](http://localhost:5173)
 
-## Building for Production
+### **Available Scripts**
 
-To create a production build:
+```bash
+npm run dev      # Start development server
+npm run build    # Production build
+npm run preview  # Preview production build
+npm run lint     # Run ESLint
+```
+
+## 📦 Production Build
+
+### **Build Optimization**
+- Code splitting into optimized chunks
+- Lazy loading for better performance
+- Tree shaking to eliminate unused code
+- Asset optimization and compression
 
 ```bash
 npm run build
 ```
 
-The build output will be in the `dist` directory.
+**Build Output:**
+- Main bundle: ~66KB gzipped
+- Chart components: Separate chunk
+- Page components: Individual chunks
+- Vendor libraries: Optimized chunks
 
-## Deployment
+## 🌐 Deployment
 
-This project is configured for deployment on Vercel. To deploy:
+### **Vercel (Recommended)**
+1. Connect your GitHub repository to [Vercel](https://vercel.com)
+2. Vercel auto-detects Vite configuration
+3. Deploy with zero configuration
 
-1. Install Vercel CLI:
-
+### **Manual Deployment**
 ```bash
-npm install -g vercel
+# Build the project
+npm run build
+
+# Deploy the dist/ folder to your hosting provider
 ```
 
-2. Deploy to Vercel:
+### **GitHub Pages**
+The project is configured for GitHub Pages deployment with proper base path handling.
 
-```bash
-vercel
-```
+## ⌨️ Keyboard Shortcuts
 
-Alternatively, you can deploy through the Vercel dashboard:
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + D` | Dashboard |
+| `Ctrl/Cmd + T` | Transactions |
+| `Ctrl/Cmd + A` | Accounts |
+| `Ctrl/Cmd + I` | Investments |
+| `Ctrl/Cmd + S` | Settings |
+| `?` | Show help |
+| `Esc` | Close modals |
 
-1. Push your code to GitHub
-2. Import your repository on [Vercel](https://vercel.com)
-3. Vercel will automatically detect the correct settings
-4. Click "Deploy"
+## 🎯 Performance Features
 
-## Project Structure
+### **Code Splitting**
+- Automatic route-based splitting
+- Component-level lazy loading
+- Optimized vendor chunk separation
 
-```
-financial-dashboard/
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── layouts/        # Layout components
-│   ├── pages/          # Page components
-│   ├── App.tsx         # Main application component
-│   └── main.tsx        # Application entry point
-├── public/             # Static assets
-├── index.html          # HTML template
-├── tailwind.config.js  # Tailwind CSS configuration
-├── vite.config.ts      # Vite configuration
-└── vercel.json         # Vercel deployment configuration
-```
+### **Loading States**
+- Skeleton screens for better UX
+- Context-aware loading indicators
+- Smooth transitions between states
 
-## Contributing
+### **Error Handling**
+- Global error boundaries
+- Graceful degradation
+- User-friendly error messages
 
+## ♿ Accessibility Features
+
+### **Keyboard Navigation**
+- Full keyboard support
+- Skip links for screen readers
+- Focus management in modals
+
+### **Screen Reader Support**
+- ARIA labels and descriptions
+- Live regions for dynamic content
+- Semantic HTML structure
+
+### **Visual Accessibility**
+- High contrast mode support
+- Reduced motion preferences
+- Scalable text and interfaces
+
+## 🧪 Browser Support
+
+- **Chrome** 90+
+- **Firefox** 88+
+- **Safari** 14+
+- **Edge** 90+
+
+## 📊 Bundle Analysis
+
+| Component | Size (gzipped) |
+|-----------|----------------|
+| Main bundle | ~66KB |
+| Chart components | ~16KB |
+| Page routes | ~4-17KB each |
+| Vendor libraries | ~65KB |
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### **Development Workflow**
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with proper TypeScript types
+4. Add tests if applicable
+5. Ensure accessibility compliance
+6. Commit with conventional commits
+7. Push and create a Pull Request
 
-## License
+### **Code Standards**
+- TypeScript for type safety
+- ESLint for code quality
+- Accessibility-first development
+- Performance-conscious coding
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📝 Changelog
 
-## Acknowledgments
+See [ENHANCEMENTS.md](ENHANCEMENTS.md) for detailed information about recent improvements and features.
 
-- Design inspired by modern financial applications
-- Icons provided by [Heroicons](https://heroicons.com/)
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Design**: Inspired by modern fintech applications
+- **Icons**: [Heroicons](https://heroicons.com/)
+- **Charts**: [Chart.js](https://www.chartjs.org/)
+- **Accessibility**: Following WCAG 2.1 AA guidelines
+- **Performance**: Optimized for Core Web Vitals
+
+## 📞 Support
+
+- 📧 **Issues**: [GitHub Issues](https://github.com/bugracinbat/financial-dashboard/issues)
+- 📖 **Documentation**: See inline code comments
+- 🚀 **Feature Requests**: Open an issue with the enhancement label
+
+---
+
+**Built with ❤️ for the modern web** • **Accessibility-first** • **Performance-optimized** • **Production-ready**

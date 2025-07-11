@@ -16,7 +16,7 @@ import {
   XMarkIcon,
   SunIcon,
   MoonIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
   UserCircleIcon,
   CogIcon,
   QuestionMarkCircleIcon,
@@ -487,7 +487,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
                     </div>
                     <div className="p-2 border-t border-gray-100">
                       <button className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
-                        <ArrowRightOnRectangleIcon className="h-4 w-4" />
+                        <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
                         <span>Sign Out</span>
                       </button>
                     </div>
