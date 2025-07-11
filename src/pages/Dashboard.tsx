@@ -18,6 +18,12 @@ import {
   StarIcon,
   ClockIcon,
   CheckCircleIcon,
+  TrendingUpIcon,
+  TrendingDownIcon,
+  BellIcon,
+  EyeIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
 } from "@heroicons/react/24/outline";
 import {
   StarIcon as StarIconSolid,
@@ -110,6 +116,53 @@ const recentTransactions = [
     amount: "+$5,400",
     type: "deposit",
     icon: "👤",
+  },
+];
+
+const insightData = {
+  totalSpending: 2850,
+  previousMonthSpending: 3200,
+  topCategory: "Entertainment",
+  savingsGoal: 5000,
+  currentSavings: 3750,
+  monthlyIncome: 8500,
+  projectedSavings: 4200,
+};
+
+const spendingGoals = [
+  {
+    id: 1,
+    title: "Emergency Fund",
+    target: 10000,
+    current: 7500,
+    category: "savings",
+    dueDate: "Dec 2024",
+  },
+  {
+    id: 2,
+    title: "Monthly Budget",
+    target: 3000,
+    current: 2150,
+    category: "spending",
+    dueDate: "This Month",
+  },
+];
+
+const notifications = [
+  {
+    id: 1,
+    type: "transaction",
+    message: "Payment received from John Doe",
+    amount: "+$1,250",
+    time: "2 min ago",
+    isNew: true,
+  },
+  {
+    id: 2,
+    type: "goal",
+    message: "You're 75% toward your emergency fund goal",
+    time: "1 hour ago",
+    isNew: false,
   },
 ];
 
@@ -329,6 +382,8 @@ export default function Dashboard() {
   const [transferSuccess, setTransferSuccess] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [transferNote, setTransferNote] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showInsights, setShowInsights] = useState(true);
 
   const filteredUsers = showFavoritesOnly 
     ? quickTransferUsers.filter(user => user.isFavorite)
@@ -365,18 +420,157 @@ export default function Dashboard() {
     setTransferAmount(amount.toString());
   };
 
+  const spendingChange = ((insightData.totalSpending - insightData.previousMonthSpending) / insightData.previousMonthSpending * 100);
+  const savingsProgress = (insightData.currentSavings / insightData.savingsGoal * 100);
+
   return (
     <div className="space-y-6">
+      {/* Header with notifications */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-xl font-semibold text-[#1E293B]">Dashboard Overview</h2>
+          <p className="text-sm text-gray-500 mt-1">Welcome back! Here's your financial summary</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className={`p-2 rounded-lg text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors relative ${
+                notifications.some(n => n.isNew) ? 'notification-pulse' : ''
+              }`}
+            >
+              <BellIcon className="h-5 w-5" />
+              {notifications.some(n => n.isNew) && (
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+              )}
+            </button>
+            {showNotifications && (
+              <div className="absolute right-0 top-12 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 animate-in slide-in-from-top-2">
+                <div className="p-4 border-b border-gray-100">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
+                </div>
+                <div className="p-2">
+                  {notifications.map((notification) => (
+                    <div key={notification.id} className={`p-3 rounded-lg mb-2 transition-colors ${notification.isNew ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-900">{notification.message}</p>
+                          {notification.amount && (
+                            <p className="text-lg font-semibold text-green-600 mt-1">{notification.amount}</p>
+                          )}
+                        </div>
+                        <span className="text-xs text-gray-500">{notification.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <button className="btn-primary rounded-lg text-sm">
+            <span>See All</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Smart Insights Widget */}
+      {showInsights && (
+        <div className="glass rounded-2xl p-6 shadow-xl card-hover border border-blue-100/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold text-gray-900 flex items-center">
+              <EyeIcon className="h-5 w-5 mr-2 text-blue-600" />
+              Smart Insights
+            </h3>
+            <button
+              onClick={() => setShowInsights(false)}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white/70 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">This Month's Spending</p>
+                  <p className="text-2xl font-bold text-gray-900">${insightData.totalSpending.toLocaleString()}</p>
+                </div>
+                <div className={`flex items-center ${spendingChange < 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {spendingChange < 0 ? <ArrowDownIcon className="h-4 w-4" /> : <ArrowUpIcon className="h-4 w-4" />}
+                  <span className="text-sm font-medium ml-1">{Math.abs(spendingChange).toFixed(1)}%</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">vs last month</p>
+            </div>
+            <div className="bg-white/70 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">Savings Progress</p>
+                  <p className="text-2xl font-bold text-gray-900">{savingsProgress.toFixed(0)}%</p>
+                </div>
+                <TrendingUpIcon className="h-8 w-8 text-green-600" />
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  className="bg-green-600 h-2 rounded-full transition-all duration-500"
+                  style={{ width: `${savingsProgress}%` }}
+                ></div>
+              </div>
+            </div>
+            <div className="bg-white/70 rounded-lg p-4">
+              <div>
+                <p className="text-sm text-gray-600">Top Category</p>
+                <p className="text-lg font-semibold text-gray-900">{insightData.topCategory}</p>
+                <p className="text-sm text-blue-600 mt-1">30% of total spending</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Goal Tracking Widget */}
+      <div className="glass rounded-2xl p-6 shadow-xl card-hover">
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
+          <TrendingUpIcon className="h-5 w-5 mr-2 text-green-600" />
+          Financial Goals
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {spendingGoals.map((goal) => {
+            const progress = (goal.current / goal.target) * 100;
+            return (
+              <div key={goal.id} className="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h4 className="font-medium text-gray-900">{goal.title}</h4>
+                    <p className="text-sm text-gray-500">{goal.dueDate}</p>
+                  </div>
+                  <span className="text-sm font-medium text-green-600">{progress.toFixed(0)}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div
+                    className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-500"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">${goal.current.toLocaleString()}</span>
+                  <span className="text-gray-600">${goal.target.toLocaleString()}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-[#1E293B]">My Cards</h2>
-        <button className="btn-primary rounded-lg text-sm">
-          <span>See All</span>
-        </button>
       </div>
 
       {/* Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <div className="w-full">
+        <div className="w-full animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-6 relative overflow-hidden h-full animate-gradient shadow-2xl shadow-purple-900/50 card-hover">
             <div className="flex justify-between items-start mb-8">
               <div>
@@ -412,7 +606,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-full">
+        <div className="w-full animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <div className="rounded-2xl glass glass-hover p-6 relative overflow-hidden h-full shadow-xl">
             <div className="flex justify-between items-start mb-8">
               <div>
@@ -448,7 +642,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-full">
+        <div className="w-full animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <div className="rounded-2xl glass glass-hover p-6 h-full shadow-xl">
             <h3 className="font-semibold mb-4 text-gray-900">
               Recent Transaction
@@ -498,7 +692,7 @@ export default function Dashboard() {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2">
+        <div className="xl:col-span-2 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Weekly Activity
@@ -508,7 +702,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="xl:col-span-1">
+        <div className="xl:col-span-1 animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Expense Statistics
@@ -526,7 +720,7 @@ export default function Dashboard() {
 
       {/* Quick Transfer & Balance History */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-1">
+        <div className="xl:col-span-1 animate-slide-in" style={{ animationDelay: '0.6s' }}>
           <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-semibold text-gray-900">Quick Transfer</h3>
@@ -663,7 +857,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="xl:col-span-2">
+        <div className="xl:col-span-2 animate-fade-in" style={{ animationDelay: '0.7s' }}>
           <div className="glass rounded-2xl p-6 shadow-xl card-hover">
             <h3 className="font-semibold mb-6 text-gray-900">
               Balance History
