@@ -1,23 +1,9 @@
-import { Line, Doughnut } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  Filler,
-} from "chart.js";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import {
   PlusIcon,
   PaperAirplaneIcon,
   StarIcon,
   ClockIcon,
-  CheckCircleIcon,
   BellIcon,
   EyeIcon,
   ArrowUpIcon,
@@ -26,17 +12,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  Filler
-);
+// Lazy load chart components
+const LineChart = lazy(() => import("../components/Charts/LineChart"));
+const DoughnutChart = lazy(() => import("../components/Charts/DoughnutChart"));
+const TransferModal = lazy(() => import("../components/TransferModal"));
 
 const weeklyActivityData = {
   labels: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
@@ -80,7 +59,7 @@ const balanceHistoryData = {
       label: "Balance",
       data: [200, 300, 450, 700, 250, 450, 600],
       borderColor: "#0066FF",
-      backgroundColor: (context: any) => {
+      backgroundColor: (context: { chart: { ctx: CanvasRenderingContext2D } }) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 300);
         gradient.addColorStop(0, "rgba(0, 102, 255, 0.3)");
@@ -343,7 +322,7 @@ const balanceHistoryOptions = {
       padding: 12,
       displayColors: false,
       callbacks: {
-        label: function(context: any) {
+        label: function(context: { parsed: { y: number } }) {
           return `Balance: $${context.parsed.y}`;
         }
       }
@@ -800,7 +779,7 @@ export default function Dashboard() {
               Weekly Activity
             </h3>
             <div className="h-[300px]">
-              <Line data={weeklyActivityData} options={chartOptions} />
+              <LineChart data={weeklyActivityData} options={chartOptions} />
             </div>
           </div>
         </div>
@@ -813,7 +792,7 @@ export default function Dashboard() {
               Expense Statistics
             </h3>
             <div className="relative h-[300px] flex items-center justify-center">
-              <Doughnut data={expenseData} options={doughnutOptions} />
+              <DoughnutChart data={expenseData} options={doughnutOptions} />
               <div className="absolute inset-0 flex items-center justify-center flex-col">
                 <p className="text-3xl font-semibold text-gray-900">30%</p>
                 <p className="text-sm text-gray-500">Entertainment</p>
@@ -1015,186 +994,28 @@ export default function Dashboard() {
             </div>
             
             <div className="h-[280px] -mx-2">
-              <Line data={balanceHistoryData} options={balanceHistoryOptions} />
+              <LineChart data={balanceHistoryData} options={balanceHistoryOptions} />
             </div>
           </div>
         </div>
       </div>
 
       {/* Enhanced Transfer Modal */}
-      {showTransferModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-100">
-            {transferSuccess ? (
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircleIcon className="w-8 h-8 text-green-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Transfer Successful!
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  ${transferAmount} has been sent to {selectedUser?.name}
-                </p>
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-xs text-gray-500">Transaction ID</p>
-                  <p className="text-sm font-mono text-gray-900">
-                    TXN-{Date.now()}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {selectedUser ? "Confirm Transfer" : "Send Money"}
-                  </h3>
-                  <button
-                    onClick={() => setShowTransferModal(false)}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                {selectedUser && (
-                  <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-50 rounded-lg">
-                    <img
-                      src={selectedUser.image}
-                      alt={selectedUser.name}
-                      className="w-12 h-12 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {selectedUser.name}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {selectedUser.email}
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Amount
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
-                        $
-                      </span>
-                      <input
-                        type="number"
-                        placeholder="0.00"
-                        className="w-full pl-8 pr-4 py-3 glass border border-white/20 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                        value={transferAmount}
-                        onChange={(e) => setTransferAmount(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Note (Optional)
-                    </label>
-                    <textarea
-                      rows={3}
-                      className="w-full px-4 py-3 glass border border-white/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
-                      placeholder="Add a note for this transfer..."
-                      value={transferNote}
-                      onChange={(e) => setTransferNote(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Quick Amount Buttons */}
-                  <div>
-                    <p className="text-sm font-medium text-gray-700 mb-2">
-                      Quick amounts
-                    </p>
-                    <div className="grid grid-cols-4 gap-2">
-                      {[50, 100, 250, 500].map((amount) => (
-                        <button
-                          key={amount}
-                          onClick={() => handleQuickAmount(amount)}
-                          className="px-3 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-blue-50 hover:text-blue-600 transition-colors"
-                        >
-                          ${amount}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-blue-50 rounded-lg p-4">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-600">Transfer amount</span>
-                      <span className="font-semibold">
-                        ${transferAmount || "0.00"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm mt-1">
-                      <span className="text-gray-600">Transfer fee</span>
-                      <span className="font-semibold">$0.00</span>
-                    </div>
-                    <div className="border-t border-blue-200 mt-2 pt-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold text-gray-900">
-                          Total
-                        </span>
-                        <span className="font-bold text-lg text-blue-600">
-                          ${transferAmount || "0.00"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3 pt-4">
-                    <button
-                      onClick={() => setShowTransferModal(false)}
-                      className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleTransferSubmit}
-                      disabled={
-                        !transferAmount ||
-                        parseFloat(transferAmount) <= 0 ||
-                        isTransferring
-                      }
-                      className="flex-1 btn-primary rounded-xl text-sm flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isTransferring ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          <span>Sending...</span>
-                        </>
-                      ) : (
-                        <>
-                          <PaperAirplaneIcon className="h-4 w-4 mr-2" />
-                          <span>Send ${transferAmount || "0.00"}</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      <Suspense fallback={null}>
+        <TransferModal
+          showModal={showTransferModal}
+          setShowModal={setShowTransferModal}
+          selectedUser={selectedUser}
+          transferAmount={transferAmount}
+          setTransferAmount={setTransferAmount}
+          transferNote={transferNote}
+          setTransferNote={setTransferNote}
+          transferSuccess={transferSuccess}
+          isTransferring={isTransferring}
+          handleTransferSubmit={handleTransferSubmit}
+          handleQuickAmount={handleQuickAmount}
+        />
+      </Suspense>
     </div>
   );
 }
