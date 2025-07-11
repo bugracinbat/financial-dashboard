@@ -1,18 +1,42 @@
 import { useState, lazy, Suspense } from "react";
 
-// Import new components
-import InsightsWidget from "../components/Dashboard/InsightsWidget";
-import GoalTracker from "../components/Dashboard/GoalTracker";
-import CardDisplay from "../components/Dashboard/CardDisplay";
-import RecentTransactions from "../components/Dashboard/RecentTransactions";
-import WeeklyActivity from "../components/Dashboard/WeeklyActivity";
-import ExpenseStatistics from "../components/Dashboard/ExpenseStatistics";
-import QuickTransfer, { QuickTransferUser } from "../components/Dashboard/QuickTransfer";
-import BalanceHistory from "../components/Dashboard/BalanceHistory";
+// Import loading skeletons and progressive loader
+import {
+  InsightsWidgetSkeleton,
+  GoalTrackerSkeleton,
+  CardDisplaySkeleton,
+  RecentTransactionsSkeleton,
+  WeeklyActivitySkeleton,
+  ExpenseStatisticsSkeleton,
+  QuickTransferSkeleton,
+  BalanceHistorySkeleton,
+} from "../components/Dashboard/LoadingSkeletons";
+import ProgressiveLoader from "../components/Dashboard/ProgressiveLoader";
+
+// Import non-lazy components (lightweight)
 import NotificationPanel from "../components/Dashboard/NotificationPanel";
 
-// Lazy load modal
+// Lazy load all Dashboard components
+const InsightsWidget = lazy(() => import("../components/Dashboard/InsightsWidget"));
+const GoalTracker = lazy(() => import("../components/Dashboard/GoalTracker"));
+const CardDisplay = lazy(() => import("../components/Dashboard/CardDisplay"));
+const RecentTransactions = lazy(() => import("../components/Dashboard/RecentTransactions"));
+const WeeklyActivity = lazy(() => import("../components/Dashboard/WeeklyActivity"));
+const ExpenseStatistics = lazy(() => import("../components/Dashboard/ExpenseStatistics"));
+const QuickTransfer = lazy(() => import("../components/Dashboard/QuickTransfer"));
+const BalanceHistory = lazy(() => import("../components/Dashboard/BalanceHistory"));
 const TransferModal = lazy(() => import("../components/TransferModal"));
+
+// Import types
+type QuickTransferUser = {
+  id: number;
+  name: string;
+  role: string;
+  email: string;
+  isFavorite: boolean;
+  lastTransferAmount: number;
+  image: string;
+};
 
 const weeklyActivityData = {
   labels: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
@@ -496,14 +520,28 @@ export default function Dashboard() {
       </div>
 
       {/* Smart Insights Widget */}
-      <InsightsWidget
-        data={insightData}
-        show={showInsights}
-        onClose={() => setShowInsights(false)}
-      />
+      <ProgressiveLoader
+        fallback={<InsightsWidgetSkeleton />}
+        delay={0}
+      >
+        <Suspense fallback={<InsightsWidgetSkeleton />}>
+          <InsightsWidget
+            data={insightData}
+            show={showInsights}
+            onClose={() => setShowInsights(false)}
+          />
+        </Suspense>
+      </ProgressiveLoader>
 
       {/* Goal Tracking Widget */}
-      <GoalTracker goals={spendingGoals} />
+      <ProgressiveLoader
+        fallback={<GoalTrackerSkeleton />}
+        delay={200}
+      >
+        <Suspense fallback={<GoalTrackerSkeleton />}>
+          <GoalTracker goals={spendingGoals} />
+        </Suspense>
+      </ProgressiveLoader>
 
       <div className="flex justify-between items-center animate-fade-in">
         <h2 className="text-xl font-semibold text-[#1E293B]">My Cards</h2>
@@ -511,63 +549,112 @@ export default function Dashboard() {
 
       {/* Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <CardDisplay
-          variant="dark"
-          balance="$5,756"
-          cardHolder="Eddy Cusuma"
-          cardNumber="3778 **** **** 1234"
-          validThru="12/22"
-          animationDelay="0.1s"
-        />
+        <ProgressiveLoader
+          fallback={<CardDisplaySkeleton />}
+          delay={400}
+        >
+          <Suspense fallback={<CardDisplaySkeleton />}>
+            <CardDisplay
+              variant="dark"
+              balance="$5,756"
+              cardHolder="Eddy Cusuma"
+              cardNumber="3778 **** **** 1234"
+              validThru="12/22"
+              animationDelay="0.1s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
 
-        <CardDisplay
-          variant="light"
-          balance="$5,756"
-          cardHolder="Eddy Cusuma"
-          cardNumber="3778 **** **** 1234"
-          validThru="12/22"
-          animationDelay="0.2s"
-        />
+        <ProgressiveLoader
+          fallback={<CardDisplaySkeleton />}
+          delay={500}
+        >
+          <Suspense fallback={<CardDisplaySkeleton />}>
+            <CardDisplay
+              variant="light"
+              balance="$5,756"
+              cardHolder="Eddy Cusuma"
+              cardNumber="3778 **** **** 1234"
+              validThru="12/22"
+              animationDelay="0.2s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
 
-        <RecentTransactions
-          transactions={recentTransactions}
-          animationDelay="0.3s"
-        />
+        <ProgressiveLoader
+          fallback={<RecentTransactionsSkeleton />}
+          delay={600}
+        >
+          <Suspense fallback={<RecentTransactionsSkeleton />}>
+            <RecentTransactions
+              transactions={recentTransactions}
+              animationDelay="0.3s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <WeeklyActivity
-          data={weeklyActivityData}
-          options={chartOptions}
-          activityPeriod={activityPeriod}
-          onPeriodChange={setActivityPeriod}
-          animationDelay="0.4s"
-        />
-        <ExpenseStatistics
-          data={expenseData}
-          options={doughnutOptions}
-          categories={expenseCategories}
-          totalAmount={2833}
-          animationDelay="0.5s"
-        />
+        <ProgressiveLoader
+          fallback={<WeeklyActivitySkeleton />}
+          delay={800}
+        >
+          <Suspense fallback={<WeeklyActivitySkeleton />}>
+            <WeeklyActivity
+              data={weeklyActivityData}
+              options={chartOptions}
+              activityPeriod={activityPeriod}
+              onPeriodChange={setActivityPeriod}
+              animationDelay="0.4s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
+        <ProgressiveLoader
+          fallback={<ExpenseStatisticsSkeleton />}
+          delay={900}
+        >
+          <Suspense fallback={<ExpenseStatisticsSkeleton />}>
+            <ExpenseStatistics
+              data={expenseData}
+              options={doughnutOptions}
+              categories={expenseCategories}
+              totalAmount={2833}
+              animationDelay="0.5s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
       </div>
 
       {/* Quick Transfer & Balance History */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <QuickTransfer
-          users={quickTransferUsers}
-          transferAmount={transferAmount}
-          onTransferAmountChange={setTransferAmount}
-          onTransfer={handleQuickTransfer}
-          onShowModal={() => setShowTransferModal(true)}
-          animationDelay="0.6s"
-        />
-        <BalanceHistory
-          data={balanceHistoryData}
-          options={balanceHistoryOptions}
-          animationDelay="0.7s"
-        />
+        <ProgressiveLoader
+          fallback={<QuickTransferSkeleton />}
+          delay={1000}
+        >
+          <Suspense fallback={<QuickTransferSkeleton />}>
+            <QuickTransfer
+              users={quickTransferUsers}
+              transferAmount={transferAmount}
+              onTransferAmountChange={setTransferAmount}
+              onTransfer={handleQuickTransfer}
+              onShowModal={() => setShowTransferModal(true)}
+              animationDelay="0.6s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
+        <ProgressiveLoader
+          fallback={<BalanceHistorySkeleton />}
+          delay={1100}
+        >
+          <Suspense fallback={<BalanceHistorySkeleton />}>
+            <BalanceHistory
+              data={balanceHistoryData}
+              options={balanceHistoryOptions}
+              animationDelay="0.7s"
+            />
+          </Suspense>
+        </ProgressiveLoader>
       </div>
 
       {/* Enhanced Transfer Modal */}
